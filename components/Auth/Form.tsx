@@ -2,11 +2,15 @@
 import { useCallback, useState } from "react";
 import Input from "./Input";
 import React from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 import { AiOutlineGoogle, AiOutlineGithub } from "react-icons/ai";
+import axios from "axios";
 const Form = () => {
+  const router = useRouter();
   const [variant, setVariant] = useState("login");
-  const [username, setUsername] = useState("");
+  const [name, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,12 +19,36 @@ const Form = () => {
       currentVariant === "login" ? "register" : "login"
     );
   }, []);
-  const login = () => {
-    console.log("login")
-  };
-  const register = () => {
-    console.log("register")
-  };
+
+  const login = useCallback(async () => {
+    try {
+      const status = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/",
+      });
+      console.log(status);
+      if (!status?.error) router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, password, router]);
+
+  //register
+
+  const register = useCallback(async () => {
+    try {
+      await axios.post("api/register", {
+        email,
+        name,
+        password,
+      });
+      login();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, name, password, login]);
 
   return (
     <div className=" px-5 py-5 transition">
@@ -33,7 +61,7 @@ const Form = () => {
             label="Username"
             id="username"
             type="text"
-            value={username}
+            value={name}
             onChange={(e: any) => {
               setUsername(e.target.value);
             }}
