@@ -19,6 +19,7 @@ const Input: React.FC<InputProps> = ({ label, type, value, onChange, id }) => {
         type={type}
         value={value}
         onChange={onChange}
+        required
       />
     </div>
   );
