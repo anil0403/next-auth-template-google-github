@@ -44,11 +44,13 @@ const Form = () => {
         name,
         password,
       });
-      login();
     } catch (error) {
       console.log(error);
     }
-  }, [email, name, password, login]);
+    setUsername("");
+    setEmail("");
+    setPassword("");
+  }, [email, name, password]);
 
   return (
     <div className=" px-5 py-5 transition">
@@ -96,10 +98,16 @@ const Form = () => {
           <AiOutlineGoogle
             className="hover:bg-gray-500 cursor-pointer rounded-full mt-1 p-2 "
             size={40}
+            onClick={() => {
+              signIn("google", { callbackUrl: "/" });
+            }}
           />
           <AiOutlineGithub
             className="hover:bg-gray-500 cursor-pointer rounded-full p-2"
             size={40}
+            onClick={() => {
+              signIn("github", { callbackUrl: "/" });
+            }}
           />
         </div>
         <p
