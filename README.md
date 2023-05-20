@@ -6,11 +6,11 @@
   </a>
 </p>
 
-> Next Js Authentication Template
+> Next Js Authentication Template that you can directly start your project form here. 😊
 
 ### 🏠 [Homepage](https://nextjs-template-liart-nine.vercel.app/)
 
-## Building a Fullstack Netflix Clone with NextJS, TailwindCSS, Prisma & MongoDB
+## Building Next Js Authentication Template
 
 Features:
 
@@ -18,7 +18,7 @@ Features:
 - MongoDB & Prisma connect, Database creation
 - Authentication with NextAuth, Google & Github Login
 - React SWR data fetching
-- Zustand state management
+- Route Protection
 
 ### Cloning the repository
 
