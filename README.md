@@ -1,4 +1,4 @@
-<h1 align="center">Netflix Clone👋</h1>
+<h1 align="center">Next Auth Template👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://twitter.com/anilshrestha43" target="_blank">
