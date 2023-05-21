@@ -34,6 +34,7 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
+        
 
         const user = await prismadb.user.findUnique({
           where: {

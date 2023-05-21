@@ -4,15 +4,28 @@ import Input from "./Input";
 import React from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { z } from "zod";
 
 import { AiOutlineGoogle, AiOutlineGithub } from "react-icons/ai";
 import axios from "axios";
+
 const Form = () => {
   const router = useRouter();
   const [variant, setVariant] = useState("login");
   const [name, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
+  // const errorMessage: Array<string> = [];
+
+  const formSchema = z.object({
+    name: z
+      .string()
+      .min(2, "Username should have at least 2 characters")
+      .max(50, "Username should not exceed 50 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password should have at least 6 characters"),
+  });
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -39,13 +52,18 @@ const Form = () => {
 
   const register = useCallback(async () => {
     try {
-      await axios.post("api/register", {
-        email,
-        name,
-        password,
-      });
-    } catch (error) {
-      console.log(error);
+      const validatedData = formSchema.parse({ name, email, password });
+      console.log(validatedData);
+      await axios.post("api/register", validatedData);
+      setErrorMessage([]);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        // Extract the individual field errors
+        const fieldErrors = error.errors.map(
+          (validationError) => validationError.message
+        );
+        setErrorMessage(fieldErrors);
+      }
     }
     setUsername("");
     setEmail("");
@@ -88,6 +106,20 @@ const Form = () => {
             setPassword(e.target.value);
           }}
         />
+        <div className="-mt-2 -mb-3">
+          {variant !== "login" &&
+            errorMessage &&
+            errorMessage.map((error, i) => (
+              <p
+                className="text-[12px] font-semibold  text-red-600 m-0 p-0 "
+                key={i + 1}
+              >
+                {" "}
+                {error}{" "}
+              </p>
+            ))}
+        </div>
+
         <button
           onClick={variant === "login" ? login : register}
           className="w-full bg-sky-500 py-2 mt-3 rounded-md text-lg font-semibold text-white hover:bg-sky-600"
